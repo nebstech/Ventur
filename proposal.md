@@ -7,8 +7,10 @@ The Ventur app aims to provide users with a platform to document their past trip
 
 <img width="1379" alt="Screenshot 2024-04-07 at 10 38 08 PM" src="https://github.com/nebstech/Ventur/assets/156877357/7f102465-a48c-401b-b42b-7d9f8a24674e">
 
+## Login / Sign-up Page
 <img width="1402" alt="Screenshot 2024-04-08 at 10 07 07 AM" src="https://github.com/nebstech/Ventur/assets/156877357/c7049db8-4014-4425-a4a2-f20ebaa879db">
 
+## Activity Feed / Home Page
 <img width="816" alt="Screenshot 2024-04-08 at 10 32 34 AM" src="https://github.com/nebstech/Ventur/assets/156877357/a0fe7255-bb83-4f10-8405-ac73221cdfd1">
 
 #### MVP Goals
