@@ -3,9 +3,12 @@
 ## Overview
 The Ventur app aims to provide users with a platform to document their past trips, share experiences, and read reviews from fellow travelers. The app will allow users to create accounts, add details of their previous trips including pictures and reviews, and browse through reviews left by other users.
 
-## Wireframe
+## ERD
 
 <img width="1221" alt="Screenshot 2024-04-08 at 1 58 22 PM" src="https://github.com/nebstech/Ventur/assets/156877357/76660c19-ff0a-4217-aa6d-86fdb43a6d39">
+
+## Routes
+<img width="1040" alt="Screenshot 2024-04-08 at 2 18 18 PM" src="https://github.com/nebstech/Ventur/assets/156877357/8c5db7eb-6d9c-4bd5-bffb-7e2b66f01661">
 
 
 ## Logo
