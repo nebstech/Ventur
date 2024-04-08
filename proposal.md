@@ -21,7 +21,6 @@ The Ventur app aims to provide users with a platform to document their past trip
 
 As a user, I want to be able to create an account and log in securely so that I can access the app.
 As a user, I want to be able to add details of my previous trips including destination, date, description, and images so that I can document my travel experiences.
-As a user, I want to be able to leave reviews for the trips I have taken, including ratings and comments, so that I can share my experiences with other users.
 As a user, I want to be able to browse through reviews left by other users so that I can read about their travel experiences and get recommendations for future trips.
 
 #### Stretch Goals
@@ -29,6 +28,7 @@ As a user, I want to be able to browse through reviews left by other users so th
 As a user, I want to be able to save trips i'm interested in for later viewing.
 As a user, I want to be able to be able to customize my profile.
 As a user, I want to be able to search for trips based on destination, date, or keywords so that I can easily find relevant reviews and information.
+As a user, I want to be able to leave reviews for the trips I have taken, including ratings and comments, so that I can share my experiences with other users.
 
 # Features
 
