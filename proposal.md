@@ -8,7 +8,8 @@ The Ventur app aims to provide users with a platform to document their past trip
 <img width="1221" alt="Screenshot 2024-04-08 at 1 58 22 PM" src="https://github.com/nebstech/Ventur/assets/156877357/76660c19-ff0a-4217-aa6d-86fdb43a6d39">
 
 ## Routes
-<img width="1040" alt="Screenshot 2024-04-08 at 2 18 18 PM" src="https://github.com/nebstech/Ventur/assets/156877357/8c5db7eb-6d9c-4bd5-bffb-7e2b66f01661">
+<img width="1043" alt="Screenshot 2024-04-08 at 2 23 51 PM" src="https://github.com/nebstech/Ventur/assets/156877357/8bd41d4b-61a3-4eb9-b19d-5c25885b74ac">
+
 
 
 ## Logo
