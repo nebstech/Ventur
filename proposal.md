@@ -3,6 +3,10 @@
 ## Overview
 The Ventur app aims to provide users with a platform to document their past trips, share experiences, and read reviews from fellow travelers. The app will allow users to create accounts, add details of their previous trips including pictures and reviews, and browse through reviews left by other users.
 
+## Wireframe
+
+
+
 #### MVP Goals
 
 As a user, I want to be able to create an account and log in securely so that I can access the app.
