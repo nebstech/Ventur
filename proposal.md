@@ -5,6 +5,7 @@ The Ventur app aims to provide users with a platform to document their past trip
 
 ## Wireframe
 
+<img width="1379" alt="Screenshot 2024-04-07 at 10 38 08 PM" src="https://github.com/nebstech/Ventur/assets/156877357/7f102465-a48c-401b-b42b-7d9f8a24674e">
 
 
 #### MVP Goals
