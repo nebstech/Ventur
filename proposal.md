@@ -38,7 +38,6 @@ Users can add details of their previous trips including destination, date, descr
 
 Users will have the ability to edit or delete their own trips.
 
-Each trip entry can be associated with multiple images.
 
 ## Review System
 Users can leave reviews for the trips they have taken.
@@ -58,7 +57,8 @@ Users can browse through a list of all trips or filter them based on various cri
 
 | Day        |   | Task                                                                |
 |------------|---|-------------------------------------------------------------------- |
-| Monday     |   | Proposal + Develop user signup, login, and logout functionalities.  |
+| Monday     |   | Proposal + Develop user signup, login, and logout routes &          |
+|            |   | functionalities.                                                    |
 | Tuesday    |   | Work on MongoDB schema design for users and trips.                  |
 |            |   | Implement CRUD operations for trips.                                |
 | Wednesday  |   | Implement APIs for adding, editing, and deleting trips.             |
