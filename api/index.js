@@ -2,6 +2,7 @@ import 'dotenv/config.js';
 import express from 'express';
 import './config/database.js'
 import userRouter from './routes/userRoutes.js'
+import TripsRouter from './routes/tripsRoutes.js'
 import cookieParser from 'cookie-parser';
 
 
@@ -16,7 +17,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/users', userRouter);
-
+app.use('/trip', TripsRouter);
 
 app.listen(PORT, () => {
   console.log(`you are listening on port http://localhost:${PORT}`)
