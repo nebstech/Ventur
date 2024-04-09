@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const tripsSchema = new mongoose.Schema({
   date: {
-    type: Number, 
+    type: String, 
     required: true
   },
   comments: {
@@ -11,13 +11,13 @@ const tripsSchema = new mongoose.Schema({
   },
   photo: {
     type: String, 
-    required: true
+    required: false
   }, // ref to location
-  location: {
+  location: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Location', // ref to the Location model
     required: true
-  }
+  }]
 });
 
 const Trip = mongoose.model('Trip', tripsSchema);

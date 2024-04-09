@@ -3,14 +3,17 @@ import { Location } from '../models/Location.js';
 
 export const createTrip = async (req, res) => {
   try {
-    // Check if the provided location exists
-    const location = await Location.findById(req.body.location);
+    // Find the location based on the provided country, state, and city
+    const { country, state, city } = req.body.location;
+    const location = await Location.findOne({ country, state, city });
+
+    // If the location doesn't exist, return an error
     if (!location) {
       return res.status(404).json({ error: 'Location not found' });
     }
 
-    // Create the trip with the provided location
-    const trip = await Trip.create(req.body);
+    // Create the trip with the found location
+    const trip = await Trip.create({ ...req.body, location: location._id });
     res.status(201).json(trip);
   } catch (error) {
     res.status(500).json({ error: 'Error creating trip' });
@@ -64,19 +67,14 @@ export const deleteTrip = async (req, res) => {
 
 export const getAllTripsByLocation = async (req, res) => {
   try {
-    // Check if the provided location exists
-    const location = await Location.findById(req.params.locationId);
-    if (!location) {
-      return res.status(404).json({ error: 'Location not found' });
-    }
-
-    // Get all trips associated with the location
+    // Find all trips associated with the specified locationId
     const trips = await Trip.find({ location: req.params.locationId });
     res.json(trips);
   } catch (error) {
     res.status(500).json({ error: 'Error retrieving trips' });
   }
 };
+
 
 export const createTripForLocation = async (req, res) => {
   try {
