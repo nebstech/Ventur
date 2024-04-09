@@ -7,14 +7,20 @@ const reviewsSchema = new mongoose.Schema({
   }, 
   rating: {
     type: Number, 
-    required: false
+    required: true,
+    min: 1,
+    max: 5,
+    validate: {
+      validator: Number.isInteger,
+      message: '{value} is not an interger rating'
+    }
   },
   trip: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Trip',
     required: true
   }
-})
+});
 
 const Review = mongoose.model('Review', reviewsSchema);
 export { Review };
