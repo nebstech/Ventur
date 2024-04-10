@@ -9,14 +9,13 @@ const locationSchema = new mongoose.Schema({
     type: String, 
     required: true
   },
-  city: {
+  cities: [{ 
     type: String, 
     required: true
-  },
-  // Reference to trips
-  trips: [{
+  }],
+  trips: [{ 
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Trip' // Reference to the Trip model
+    ref: 'Trip' 
   }]
 });
 
