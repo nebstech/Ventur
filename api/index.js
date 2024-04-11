@@ -16,6 +16,13 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 
+const corsOptions = {
+  origin: 'http://127.0.0.1:5500', 
+  credentials: true, 
+};
+
+app.use(cors(corsOptions));
+
 app.get('/api/data', (req, res) => {
   console.log('Data endpoint hit');
   res.json({ message: 'This is data from the backend' });

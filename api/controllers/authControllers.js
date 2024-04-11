@@ -5,16 +5,23 @@ import dotenv from 'dotenv/config.js';
 
 export const signup = async (req, res) => {
   try {
-    req.body.password = await bcrypt.hash(req.body.password, await bcrypt.genSalt(10));
-    const user = await User.create(req.body).catch(error => {
-      console.error('Validation error:', error);
-      res.status(400).json({ error: error.message });
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(req.body.password, await bcrypt.genSalt(10));
+    
+    // Create the user
+    const user = await User.create({ 
+      username: req.body.username,
+      password: hashedPassword 
     });
-    res.json(user)
+
+    // Send a successful response back to the client
+    res.status(201).json({ message: 'User registered successfully', userId: user._id });
   } catch (error) {
-    res.status(500).json({ error: 'Error creating user' })
+    console.error('Error creating user:', error);
+    res.status(500).json({ error: 'Error creating user' });
   }
 };
+
 
 export const login = async (req, res) => {
   try {
