@@ -3,22 +3,35 @@ import { Location } from '../models/Location.js';
 
 export const createTrip = async (req, res) => {
   try {
-    // Find the location based on the provided country, state, and city
-    const { country, state, city } = req.body.location;
+    // Assume req.user contains the authenticated user's information
+    const userId = req.user ? req.user._id : null;
+
+    const { country, state, city } = req.body;
     const location = await Location.findOne({ country, state, city });
 
-    // If the location doesn't exist, return an error
     if (!location) {
       return res.status(404).json({ error: 'Location not found' });
     }
 
-    // Create the trip with the found location
-    const trip = await Trip.create({ ...req.body, location: location._id });
+    const tripDetails = {
+      name: req.body.name,
+      comment: req.body.comment,
+      location: location._id,
+      user: userId // Associate trip with the user
+    };
+
+    if (req.file) {
+      tripDetails.image = req.file.path;
+    }
+
+    const trip = await Trip.create(tripDetails);
     res.status(201).json(trip);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Error creating trip' });
   }
 };
+
 
 export const getAllTrips = async (req, res) => {
   try {
@@ -90,5 +103,36 @@ export const createTripForLocation = async (req, res) => {
     res.status(201).json(trip);
   } catch (error) {
     res.status(500).json({ error: 'Error creating trip' });
+  }
+};
+
+// In your trip controller file
+
+export const addLocationToTrip = async (req, res) => {
+  try {
+    const { tripId } = req.params;
+    const { country, state, city } = req.body;
+    
+    // Here you would find the location or create a new one based on the country, state, and city
+    let location = await Location.findOne({ country, state, city });
+    if (!location) {
+      location = await Location.create({ country, state, city });
+    }
+
+    // Now, associate this location with the trip
+    const trip = await Trip.findByIdAndUpdate(
+      tripId,
+      { $addToSet: { location: location._id } }, // Assuming location is an array in Trip schema
+      { new: true }
+    );
+
+    if (!trip) {
+      return res.status(404).json({ error: 'Trip not found' });
+    }
+
+    res.status(200).json(trip);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error adding location to trip' });
   }
 };

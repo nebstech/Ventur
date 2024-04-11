@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import User from "./User.js"; 
 
 const tripsSchema = new mongoose.Schema({
   date: {
@@ -12,12 +13,17 @@ const tripsSchema = new mongoose.Schema({
   photo: {
     type: String, 
     required: false
-  }, // ref to location
+  },
   location: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Location', // ref to the Location model
+    ref: 'Location',
     required: true
-  }]
+  }],
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', // Reference the User model here
+    required: true
+  }
 });
 
 const Trip = mongoose.model('Trip', tripsSchema);

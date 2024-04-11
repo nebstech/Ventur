@@ -5,7 +5,6 @@ import {
 
 import { login, signup, logout } from '../controllers/authControllers.js';
 const router = express.Router();
-
 router.delete('/:id', deleteUser);
 
 router.post('/signup', signup);
