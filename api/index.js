@@ -9,8 +9,7 @@ import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose'
 import multer from 'multer';
 import tripRoutes from './routes/tripsRoutes.js';
-import { saveTrip } from './controllers/tripsController.js';
-import path from 'path';
+import { getAllTrips, saveTrip, getTripsByLocation } from './controllers/tripsController.js';
 const db = mongoose.connection
 
 
@@ -24,6 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({
   origin: ['http://localhost:5500'],
+  optionsSuccessStatus: 200
 }));
 
 const corsOptions = {
@@ -32,7 +32,6 @@ const corsOptions = {
 };
 
 const upload = multer({ storage: multer.memoryStorage() });
-// app.post('/trip', upload.single('image'), createTrip);
 
 app.use(cors(corsOptions));
 
@@ -62,8 +61,20 @@ app.get('/locations', async (req, res) => {
   }
 });
 
+app.get('/search-results', async (req, res) => {
+  const { location } = req.query;
+  try {
+      const trips = await Trip.find({ "location.city": location }); // Assuming you want to match by city
+      res.render('search-results', { trips }); // Render a view with the trips data
+  } catch (error) {
+      res.status(500).send('Failed to get search results');
+  }
+});
 
+app.get('/api/trips', getAllTrips);
+app.post('/api/trip', saveTrip);
 
+app.get('/locations/:locationId/trips', getTripsByLocation);
 
 app.use('/user', userRouter);
 app.use('/trip', tripsRouter);

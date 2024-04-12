@@ -5,10 +5,6 @@ const tripsSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  comments: {
-    type: String, 
-    required: false
-  },
   location: {
     type: [{
       country: { type: String, required: true },
@@ -16,6 +12,10 @@ const tripsSchema = new mongoose.Schema({
       city: { type: String, required: true }
     }],
     required: true
+  },
+  comments: {
+    type: String, 
+    required: false
   }
 });
 

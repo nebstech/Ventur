@@ -58,10 +58,11 @@ export const deleteLocation = async (req, res) => {
 
 export const getAllTripsByLocation = async (req, res) => {
   try {
-    // Assuming Trip is imported and available
-    const trips = await Trip.find({ location: req.params.locationId });
+    const locationId = req.params.locationId;
+    const trips = await Trip.find({ "location._id": locationId }).populate('location');
     res.json(trips);
   } catch (error) {
+    console.error('Error retrieving trips by location:', error);
     res.status(500).json({ error: 'Error retrieving trips' });
   }
 };

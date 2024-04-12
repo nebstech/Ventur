@@ -17,7 +17,7 @@ router.post('/locations', createLocation);
 router.patch('/locations/:id', updateLocation);
 router.delete('/locations/:id', deleteLocation);
 
-router.get('locations/:locationsId/trips', getAllTripsByLocation);
+router.get('/locations/:locationId/trips', getAllTripsByLocation);
 router.post('/locations/:locationId/trips', createTripForLocation);
 
 export default router;

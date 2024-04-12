@@ -2,11 +2,14 @@ import { Trip } from '../models/Trips.js';
 import { Location } from '../models/Location.js';
 
 export const saveTrip = async (req, res) => {
+  console.log("Received data:", req.body);
   try {
       const { name, comments, country, state, city } = req.body;
 
-      // Ensure that country, state, and city are not undefined
       console.log('Location data:', { country, state, city });
+      if (!country || !state || !city) {
+          throw new Error('Missing location information');  // Handling missing location info
+      }
 
       const location = {
           country,
@@ -15,16 +18,19 @@ export const saveTrip = async (req, res) => {
       };
 
       const trip = new Trip({
-          name,
-          comments,
-          location: [location]
+        name,
+        comments,  
+        location: [location]
       });
 
       await trip.save();
       res.status(201).json(trip);
   } catch (error) {
       console.error('Error saving trip:', error);
-      res.status(500).json({ error: 'Error saving trip' });
+      res.status(500).json({
+          error: 'Error saving trip',
+          message: error.message  // Provide error details
+      });
   }
 };
 
@@ -32,6 +38,7 @@ export const saveTrip = async (req, res) => {
 export const getAllTrips = async (req, res) => {
   try {
     const trips = await Trip.find();
+    
     res.json(trips);
   } catch (error) {
     res.status(500).json({ error: 'Error retrieving trips' });
