@@ -1,20 +1,20 @@
 import 'dotenv/config.js';
 import express from 'express';
 import cors  from 'cors';
-import './config/database.js'
-import userRouter from './routes/userRoutes.js'
-import tripsRouter from './routes/tripsRoutes.js'
-import locationRouter from './routes/locationRoutes.js'
+import './api/config/database.js'
+import userRouter from './api/routes/userRoutes.js'
+import tripsRouter from './api/routes/tripsRoutes.js'
+import locationRouter from './api/routes/locationRoutes.js'
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose'
 import multer from 'multer';
-import tripRoutes from './routes/tripsRoutes.js';
-import { getAllTrips, saveTrip, getTripsByLocation } from './controllers/tripsController.js';
+import tripRoutes from './api/routes/tripsRoutes.js';
+import { getAllTrips, saveTrip, getTripsByLocation } from './api/controllers/tripsController.js';
 const db = mongoose.connection
 
 
 const app = express()
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3001
 
 mongoose.connect(process.env.DATABASE_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected successfully.'))
@@ -24,12 +24,6 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-})
-.on('error', err => {
-  console.error('Server failed to start:', err);
-});
 
 app.use(express.json());
 app.use(cookieParser());
