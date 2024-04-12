@@ -1,24 +1,23 @@
 import express from 'express';
+import multer from 'multer';
 import {
   getAllTrips,
   getTripById,
-  createTrip,
   updateTrip,
   deleteTrip,
-  getAllTripsByLocation,
-  createTripForLocation,
-  addLocationToTrip
-} from '../controllers/tripsController.js'
+  saveTrip,
+  getTripsByLocation
+} from '../controllers/tripsController.js';
+
 
 const router = express.Router();
+const upload = multer({ storage: multer.memoryStorage() });
 
-router.get('/', getAllTrips); // get all trips
-router.get('/:id', getTripById); // get trip by id
-router.post('/', createTrip); // create a new trip
-router.patch('/:id', updateTrip); // update a trip
-router.delete('/:id', deleteTrip); // delete a trip
-router.get('/location/:locationId', getAllTripsByLocation); // Get all trips associated with a specific location
-router.post('/location/:locationId', createTripForLocation); // Create a new trip associated with a specific location
-router.post('/trip/:tripId/location', addLocationToTrip);
+router.get('/', getAllTrips);
+router.get('/:id', getTripById);
+router.post('/', upload.single('image'), saveTrip);
+router.patch('/:id', updateTrip);
+router.delete('/:id', deleteTrip);
+router.get('/by-location/:locationId', getTripsByLocation);
 
 export default router;

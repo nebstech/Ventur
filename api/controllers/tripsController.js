@@ -1,34 +1,30 @@
 import { Trip } from '../models/Trips.js';
 import { Location } from '../models/Location.js';
 
-export const createTrip = async (req, res) => {
+export const saveTrip = async (req, res) => {
   try {
-    // Assume req.user contains the authenticated user's information
-    const userId = req.user ? req.user._id : null;
+      const { name, comments, country, state, city } = req.body;
 
-    const { country, state, city } = req.body;
-    const location = await Location.findOne({ country, state, city });
+      // Ensure that country, state, and city are not undefined
+      console.log('Location data:', { country, state, city });
 
-    if (!location) {
-      return res.status(404).json({ error: 'Location not found' });
-    }
+      const location = {
+          country,
+          state,
+          city
+      };
 
-    const tripDetails = {
-      name: req.body.name,
-      comment: req.body.comment,
-      location: location._id,
-      user: userId // Associate trip with the user
-    };
+      const trip = new Trip({
+          name,
+          comments,
+          location: [location]
+      });
 
-    if (req.file) {
-      tripDetails.image = req.file.path;
-    }
-
-    const trip = await Trip.create(tripDetails);
-    res.status(201).json(trip);
+      await trip.save();
+      res.status(201).json(trip);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error creating trip' });
+      console.error('Error saving trip:', error);
+      res.status(500).json({ error: 'Error saving trip' });
   }
 };
 
@@ -78,13 +74,14 @@ export const deleteTrip = async (req, res) => {
   }
 };
 
-export const getAllTripsByLocation = async (req, res) => {
+export const getTripsByLocation = async (req, res) => {
   try {
-    // Find all trips associated with the specified locationId
-    const trips = await Trip.find({ location: req.params.locationId });
-    res.json(trips);
+      const locationId = req.params.locationId;
+      const trips = await Trip.find({ location: locationId }).populate('location');
+      res.status(200).json(trips);
   } catch (error) {
-    res.status(500).json({ error: 'Error retrieving trips' });
+      console.error('Error fetching trips by location:', error);
+      res.status(500).json({ error: 'Error fetching trips' });
   }
 };
 
@@ -106,7 +103,6 @@ export const createTripForLocation = async (req, res) => {
   }
 };
 
-// In your trip controller file
 
 export const addLocationToTrip = async (req, res) => {
   try {

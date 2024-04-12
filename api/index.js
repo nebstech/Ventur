@@ -8,7 +8,9 @@ import locationRouter from './routes/locationRoutes.js'
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose'
 import multer from 'multer';
-import { createTrip } from './controllers/tripsController.js';
+import tripRoutes from './routes/tripsRoutes.js';
+import { saveTrip } from './controllers/tripsController.js';
+import path from 'path';
 const db = mongoose.connection
 
 
@@ -20,13 +22,17 @@ app.use(cookieParser());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(cors({
+  origin: ['http://localhost:5500'],
+}));
+
 const corsOptions = {
   origin: 'http://127.0.0.1:5500', 
   credentials: true, 
 };
 
 const upload = multer({ storage: multer.memoryStorage() });
-app.post('/trip', upload.single('image'), createTrip);
+// app.post('/trip', upload.single('image'), createTrip);
 
 app.use(cors(corsOptions));
 
@@ -61,8 +67,9 @@ app.get('/locations', async (req, res) => {
 
 app.use('/user', userRouter);
 app.use('/trip', tripsRouter);
+app.use('/api', tripRoutes);
 app.use(locationRouter)
-app.use(express.static('ventur/ventur-frontend/public'));
+app.use(express.static('public'));
 
 
 

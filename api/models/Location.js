@@ -9,14 +9,10 @@ const locationSchema = new mongoose.Schema({
     type: String, 
     required: true
   },
-  cities: [{ 
+  city: {
     type: String, 
     required: true
-  }],
-  trips: [{ 
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Trip' 
-  }]
+  }
 });
 
 const Location = mongoose.model('Location', locationSchema);

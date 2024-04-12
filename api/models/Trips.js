@@ -1,27 +1,20 @@
 import mongoose from "mongoose";
-import User from "./User.js"; 
 
 const tripsSchema = new mongoose.Schema({
-  date: {
-    type: String, 
+  name: { 
+    type: String,
     required: true
   },
   comments: {
     type: String, 
     required: false
   },
-  photo: {
-    type: String, 
-    required: false
-  },
-  location: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Location',
-    required: true
-  }],
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // Reference the User model here
+  location: {
+    type: [{
+      country: { type: String, required: true },
+      state: { type: String, required: true },
+      city: { type: String, required: true }
+    }],
     required: true
   }
 });
