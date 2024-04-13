@@ -58,12 +58,16 @@ export const deleteLocation = async (req, res) => {
 
 export const getAllTripsByLocation = async (req, res) => {
   try {
-    const locationId = req.params.locationId;
-    const trips = await Trip.find({ "location._id": locationId }).populate('location');
-    res.json(trips);
+      const locationName = req.params.locationName; // get the location name from parameters
+      // Search for trips with a location name that includes the query string
+      const trips = await Trip.find({"location.name": {$regex: locationName, $options: 'i'}});
+      if (!trips.length) {
+          return res.status(404).json({error: 'No trips found for this location'});
+      }
+      res.json(trips);
   } catch (error) {
-    console.error('Error retrieving trips by location:', error);
-    res.status(500).json({ error: 'Error retrieving trips' });
+      console.error('Error fetching trips by location:', error);
+      res.status(500).json({error: 'Error retrieving trips'});
   }
 };
 
