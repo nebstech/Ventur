@@ -11,7 +11,21 @@ import {
 
 const router = express.Router();
 
-router.get('/locations', getAllLocations);
+router.get('/locations', async (req, res) => {
+  try {
+      if (req.query.type && req.query.type === 'countries') {
+          const locations = await db.collection('locations').distinct("country");
+          res.json(locations);
+      } else {
+          const locations = await Location.find();
+          res.json(locations);
+      }
+  } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+      console.error('Error fetching locations:', error);
+  }
+});
+
 router.get('/locations/:id', getLocationById);
 router.post('/locations', createLocation);
 router.patch('/locations/:id', updateLocation);
