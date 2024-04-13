@@ -83,3 +83,23 @@ export const createTripForLocation = async (req, res) => {
   }
 };
 
+export const getLocations = async (req, res) => {
+  const { country, state } = req.query;
+  try {
+      const collection = mongoose.connection.collection('locations');
+      if (state) {
+          const location = await collection.findOne({ country, state });
+          const cities = location ? location.cities : [];
+          res.json(cities);
+      } else if (country) {
+          const states = await collection.distinct('state', { country });
+          res.json(states);
+      } else {
+          const countries = await collection.distinct('country');
+          res.json(countries);
+      }
+  } catch (error) {
+      console.error('Database query failed:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+};
