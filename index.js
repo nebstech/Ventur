@@ -10,6 +10,7 @@ import mongoose from 'mongoose'
 import multer from 'multer';
 import tripRoutes from './api/routes/tripsRoutes.js';
 import { getAllTrips, saveTrip, getTripsByLocation } from './api/controllers/tripsController.js';
+import { getAllTripsByLocation } from './api/controllers/locationController.js';
 const db = mongoose.connection
 
 
@@ -25,11 +26,6 @@ app.get('/', (req, res) => {
 });
 
 
-app.use(express.json());
-app.use(cookieParser());
-app.use(cors());
-app.use(express.urlencoded({ extended: true }));
-
 const corsOptions = {
   origin: ['https://main--venturapp.netlify.app', 'http://127.0.0.1:5500'], // Allowed origins
   credentials: true, // Allow cookies to be sent with requests
@@ -41,12 +37,12 @@ app.use(cors(corsOptions));
 
 const upload = multer({ storage: multer.memoryStorage() });
 
-app.use(cors(corsOptions));
 
 app.get('/api/data', (req, res) => {
   console.log('Data endpoint hit');
   res.json({ message: 'This is data from the backend' });
 });
+
 
 app.get('/locations', async (req, res) => {
   const { country, state } = req.query;
@@ -69,28 +65,29 @@ app.get('/locations', async (req, res) => {
   }
 });
 
-app.get('/search-results', async (req, res) => {
-  const { location } = req.query;
-  try {
-      const trips = await Trip.find({ "location.city": location }); // Assuming you want to match by city
-      res.render('search-results', { trips }); // Render a view with the trips data
-  } catch (error) {
-      res.status(500).send('Failed to get search results');
-  }
-});
-
 app.get('/api/trips', getAllTrips);
 app.post('/api/trip', saveTrip);
+// To fetch trips by a searchable name or string
+app.get('/locations/name/:locationName/trips', getAllTripsByLocation);
 
-app.get('/locations/:locationId/trips', getTripsByLocation);
+// To fetch trips by a specific location ID
+app.get('/locations/id/:locationId/trips', getTripsByLocation);
 
 app.use('/user', userRouter);
 app.use('/trip', tripsRouter);
 app.use('/api', tripRoutes);
-app.use(locationRouter)
+app.use('/api', locationRouter);
+app.use(locationRouter);
 app.use(express.static('public'));
+app.use(express.json());
+app.use(cookieParser());
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
 
-
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.originalUrl}`); // Logs the type of HTTP method and the original URL requested.
+  next();
+});
 
 app.listen(PORT, () => {
   console.log(`you are listening on port http://localhost:${PORT}`)
