@@ -78,7 +78,7 @@ app.get('/search-results', async (req, res) => {
 });
 
 app.use('/api/trips', tripsRouter);
-app.get('/api/trips/search/:query', );
+app.get('/api/trips/search/:query', getTripsByLocation);
 
 
 app.get('/locations/:locationId/trips', getTripsByLocation);
