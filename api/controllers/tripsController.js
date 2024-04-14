@@ -22,7 +22,7 @@ export const saveTrip = async (req, res) => {
         comments,  
         location: [location]
       });
-
+      console.log(req.body);
       await trip.save();
       res.status(201).json(trip);
   } catch (error) {
