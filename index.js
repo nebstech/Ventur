@@ -9,7 +9,7 @@ import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose'
 import multer from 'multer';
 import tripRoutes from './api/routes/tripsRoutes.js';
-import { getAllTrips, saveTrip, getTripsByLocation } from './api/controllers/tripsController.js';
+import { getAllTrips, saveTrip, getTripsByLocation, searchTripsByQuery } from './api/controllers/tripsController.js';
 const db = mongoose.connection
 
 
@@ -78,7 +78,7 @@ app.get('/search-results', async (req, res) => {
 });
 
 app.use('/api/trips', tripsRouter);
-app.get('/api/trips/search/:query', getTripsByLocation);
+app.get('/api/trips/search/:query', searchTripsByQuery);
 
 
 app.get('/locations/:locationId/trips', getTripsByLocation);
