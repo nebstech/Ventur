@@ -59,24 +59,28 @@ export const getTripById = async (req, res) => {
 
 export const updateTrip = async (req, res) => {
   try {
-    const trip = await Trip.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if(!trip) {
-      return res.status(404).json({ error: 'Trip not found' });
-    }
-    res.json(trip);
+      const trip = await Trip.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      if (!trip) {
+          return res.status(404).json({ error: 'Trip not found' });
+      }
+      res.json(trip);
   } catch (error) {
-    res.status(500).json({ error: 'Error updating trip' });
+      res.status(500).json({ error: 'Error updating trip' });
   }
 }
 
 export const deleteTrip = async (req, res) => {
+  console.log("Attempting to delete trip with ID:", req.params.id);
   try {
     const trip = await Trip.findByIdAndDelete(req.params.id);
-    if(!trip) {
+    if (!trip) {
+      console.log("No trip found with ID:", req.params.id);
       return res.status(404).json({ error: 'Trip not found' });
     }
+    console.log("Trip deleted successfully:", req.params.id);
     res.json({ message: 'Trip deleted successfully' });
   } catch (error) {
+    console.error("Error deleting trip with ID:", req.params.id, error);
     res.status(500).json({ error: 'Error deleting trip' });
   }
 };
@@ -137,5 +141,26 @@ export const addLocationToTrip = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error adding location to trip' });
+  }
+};
+
+
+export const searchTripsByQuery = async (req, res) => {
+  const query = req.params.query;
+  try {
+    const trips = await Trip.find({
+      $or: [
+        {"name": {$regex: query, $options: 'i'}},
+        {"location.city": {$regex: query, $options: 'i'}},
+        {"location.state": {$regex: query, $options: 'i'}}
+      ]
+    });
+    if (!trips.length) {
+      return res.status(404).json({message: 'No trips found matching your query.'});
+    }
+    res.json(trips);
+  } catch (error) {
+    console.error('Error searching for trips:', error);
+    res.status(500).json({error: 'Internal server error'});
   }
 };

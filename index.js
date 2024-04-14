@@ -1,64 +1,96 @@
-// Import essential modules and config
 import 'dotenv/config.js';
 import express from 'express';
-import cors from 'cors';
+import cors  from 'cors';
+import './api/config/database.js'
+import userRouter from './api/routes/userRoutes.js'
+import tripsRouter from './api/routes/tripsRoutes.js'
+import locationRouter from './api/routes/locationRoutes.js'
 import cookieParser from 'cookie-parser';
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 import multer from 'multer';
+import tripRoutes from './api/routes/tripsRoutes.js';
+import { getAllTrips, saveTrip, getTripsByLocation } from './api/controllers/tripsController.js';
+const db = mongoose.connection
 
-// Import routers and database configuration
-import './api/config/database.js';
-import userRouter from './api/routes/userRoutes.js';
-import tripsRouter from './api/routes/tripsRoutes.js';
-import locationRouter from './api/routes/locationRoutes.js';
 
-// Initialize express app
-const app = express();
-const PORT = process.env.PORT || 3001;
-const upload = multer({ storage: multer.memoryStorage() });
+const app = express()
+const PORT = process.env.PORT || 3001
 
-// Configure CORS
-const corsOptions = {
-  origin: ['https://main--venturapp.netlify.app', 'http://127.0.0.1:5500'],
-  credentials: true,
-  optionsSuccessStatus: 200
-};
-app.use(cors(corsOptions));
-
-// Middleware setup
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-app.use(express.static('public'));
-
-// Connect to MongoDB
 mongoose.connect(process.env.DATABASE_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected successfully.'))
   .catch(err => console.error('Failed to connect to MongoDB:', err));
 
-// Basic endpoint to confirm server is running
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-// Define API routes
-app.use('/api/data', (req, res) => {
+
+app.use(express.json());
+app.use(cookieParser());
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+
+const corsOptions = {
+  origin: ['https://main--venturapp.netlify.app', 'http://127.0.0.1:5500'], // Allowed origins
+  credentials: true, // Allow cookies to be sent with requests
+  optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+// Use CORS with options
+app.use(cors(corsOptions));
+
+const upload = multer({ storage: multer.memoryStorage() });
+
+app.get('/api/data', (req, res) => {
   console.log('Data endpoint hit');
   res.json({ message: 'This is data from the backend' });
 });
 
+app.get('/locations', async (req, res) => {
+  const { country, state } = req.query;
+  try {
+      const collection = db.collection('locations');
+      if (state) {
+          const location = await collection.findOne({ country: country, state: state });
+          const cities = location ? location.cities : [];
+          res.json(cities);
+      } else if (country) {
+          const states = await collection.distinct('state', { country: country });
+          res.json(states);
+      } else {
+          const countries = await collection.distinct('country');
+          res.json(countries);
+      }
+  } catch (error) {
+      console.error('Database query failed:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.get('/search-results', async (req, res) => {
+  const { location } = req.query;
+  try {
+      const trips = await Trip.find({ "location.city": location }); // Assuming you want to match by city
+      res.render('search-results', { trips }); // Render a view with the trips data
+  } catch (error) {
+      res.status(500).send('Failed to get search results');
+  }
+});
+
 app.use('/api/trips', tripsRouter);
+app.get('/api/trips/search/:query', );
+
+
+app.get('/locations/:locationId/trips', getTripsByLocation);
+
 app.use('/user', userRouter);
-app.use('/api', locationRouter);
+app.use('/trip', tripsRouter);
+app.use('/api', tripRoutes);
+app.use(locationRouter)
+app.use(express.static('public'));
 
 
-// Generic logging middleware for debugging
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.originalUrl}`); // Logs the type of HTTP method and the original URL requested.
-  next();
-});
 
-// Start server listening on specified port
 app.listen(PORT, () => {
-  console.log(`Server is listening on http://localhost:${PORT}`);
-});
+  console.log(`you are listening on port http://localhost:${PORT}`)
+})
